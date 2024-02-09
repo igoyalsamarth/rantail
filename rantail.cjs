@@ -42,8 +42,7 @@ while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
   }
 
   // Replace the class name in the JSX file
-  jsxFileContent = jsxFileContent.replace(new RegExp(`className="${originalClassName}"`, 'g'), `className="${tailwindClasses[originalClassName]}"`);
-}
+  jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${originalClassName}\\1`, 'g'), `className=$1${tailwindClasses[originalClassName]}$1`);}
 
 // Write the modified JSX file
 fs.writeFileSync(jsxFilePath, jsxFileContent);
