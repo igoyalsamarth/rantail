@@ -1,6 +1,5 @@
-import fs from 'fs'
-import path from 'path'
-
+const fs = require('fs');
+const path = require('path');
 // Define the mapping from original class names to Tailwind CSS classes
 const tailwindClasses = {
   'text-lg': 'text-lg',
