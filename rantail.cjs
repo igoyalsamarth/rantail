@@ -24,7 +24,7 @@ let cssContent = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n
 fs.writeFileSync(cssFilePath, cssContent);
 
 // Use a regular expression to match all class names in the JSX file
-const classNameRegex = /className="([^"]*)"/g;
+const classNameRegex = /className=['"]([^'"]*)['"]/g;
 let match;
 const tailwindClasses = {};
 
