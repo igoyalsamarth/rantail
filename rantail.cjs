@@ -1,5 +1,9 @@
 const fs = require('fs');
 const path = require('path');
+const glob = require('glob');
+
+// Read the configuration file
+const config = require('./rantail.config.js');
 
 // Generate a random class name
 const generateRandomString = () => {
@@ -11,10 +15,6 @@ const generateRandomString = () => {
   }
   return result;
 };
-
-// Read the JSX file
-const jsxFilePath = path.join(__dirname, '/src/App.jsx');
-let jsxFileContent = fs.readFileSync(jsxFilePath, 'utf8');
 
 // Define the CSS file path
 const cssFilePath = path.join(__dirname, '/src/index.css');
@@ -28,27 +28,44 @@ const classNameRegex = /className=(['"])(.*?)\1/g;
 let match;
 const tailwindClasses = {};
 
-while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-  const originalClassNames = match[2].split(' ');
-
-  let newClassNames = '';
-  for (const originalClassName of originalClassNames) {
-    // If the class name is not in the tailwindClasses object, generate a new random class name for it
-    if (!tailwindClasses[originalClassName]) {
-      const randomClassName = generateRandomString();
-      tailwindClasses[originalClassName] = randomClassName;
-
-      // Add the styles to the CSS file
-      cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
-      fs.appendFileSync(cssFilePath, cssContent);
+// Loop through each content pattern in the configuration file
+for (const pattern of config.content) {
+  // Use glob to match the file pattern
+  glob(pattern, (err, files) => {
+    if (err) {
+      console.error(err);
+      return;
     }
 
-    newClassNames += tailwindClasses[originalClassName] + ' ';
-  }
+    // Loop through each matched file
+    for (const file of files) {
+      // Read the JSX file
+      let jsxFileContent = fs.readFileSync(file, 'utf8');
 
-  // Replace the class name in the JSX file
-  jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${match[2]}\\1`, 'g'), `className=$1${newClassNames.trim()}$1`);
+      while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
+        const originalClassNames = match[2].split(' ');
+
+        let newClassNames = '';
+        for (const originalClassName of originalClassNames) {
+          // If the class name is not in the tailwindClasses object, generate a new random class name for it
+          if (!tailwindClasses[originalClassName]) {
+            const randomClassName = generateRandomString();
+            tailwindClasses[originalClassName] = randomClassName;
+
+            // Add the styles to the CSS file
+            cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
+            fs.appendFileSync(cssFilePath, cssContent);
+          }
+
+          newClassNames += tailwindClasses[originalClassName] + ' ';
+        }
+
+        // Replace the class name in the JSX file
+        jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${match[2]}\\1`, 'g'), `className=$1${newClassNames.trim()}$1`);
+      }
+
+      // Write the modified JSX file
+      fs.writeFileSync(file, jsxFileContent);
+    }
+  });
 }
-
-// Write the modified JSX file
-fs.writeFileSync(jsxFilePath, jsxFileContent);
