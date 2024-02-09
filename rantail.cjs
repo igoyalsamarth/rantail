@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+
 // Define the mapping from original class names to Tailwind CSS classes
 const tailwindClasses = {
   'text-lg': 'text-lg',
@@ -12,8 +13,15 @@ const generateRandomString = () => {
 };
 
 // Read the JSX file
-const jsxFilePath = path.join(__dirname, 'App.jsx');
+const jsxFilePath = path.join(__dirname, '/src/App.jsx');
 let jsxFileContent = fs.readFileSync(jsxFilePath, 'utf8');
+
+// Define the CSS file path
+const cssFilePath = path.join(__dirname, 'index.css');
+
+// Add the base Tailwind CSS directives to the CSS file
+let cssContent = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
+fs.writeFileSync(cssFilePath, cssContent);
 
 // Replace the class names in the JSX file and add the styles to the CSS file
 for (const originalClassName in tailwindClasses) {
@@ -24,8 +32,7 @@ for (const originalClassName in tailwindClasses) {
   jsxFileContent = jsxFileContent.replace(new RegExp(`className="${originalClassName}"`, 'g'), `className="${randomClassName}"`);
 
   // Add the styles to the CSS file
-  const cssFilePath = path.join(__dirname, 'index.css');
-  const cssContent = `.${randomClassName} { @apply ${tailwindClass}; }\n`;
+  cssContent = `.${randomClassName} { @apply ${tailwindClass}; }\n`;
   fs.appendFileSync(cssFilePath, cssContent);
 }
 
