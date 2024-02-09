@@ -24,25 +24,31 @@ let cssContent = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n
 fs.writeFileSync(cssFilePath, cssContent);
 
 // Use a regular expression to match all class names in the JSX file
-const classNameRegex = /className=['"]([^'"]*)['"]/g;
+const classNameRegex = /className=(['"])(.*?)\1/g;
 let match;
 const tailwindClasses = {};
 
 while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-  const originalClassName = match[1];
+  const originalClassNames = match[2].split(' ');
 
-  // If the class name is not in the tailwindClasses object, generate a new random class name for it
-  if (!tailwindClasses[originalClassName]) {
-    const randomClassName = generateRandomString();
-    tailwindClasses[originalClassName] = randomClassName;
+  let newClassNames = '';
+  for (const originalClassName of originalClassNames) {
+    // If the class name is not in the tailwindClasses object, generate a new random class name for it
+    if (!tailwindClasses[originalClassName]) {
+      const randomClassName = generateRandomString();
+      tailwindClasses[originalClassName] = randomClassName;
 
-    // Add the styles to the CSS file
-    cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
-    fs.appendFileSync(cssFilePath, cssContent);
+      // Add the styles to the CSS file
+      cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
+      fs.appendFileSync(cssFilePath, cssContent);
+    }
+
+    newClassNames += tailwindClasses[originalClassName] + ' ';
   }
 
   // Replace the class name in the JSX file
-  jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${originalClassName}\\1`, 'g'), `className=$1${tailwindClasses[originalClassName]}$1`);
+  jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${match[2]}\\1`, 'g'), `className=$1${newClassNames.trim()}$1`);
 }
+
 // Write the modified JSX file
 fs.writeFileSync(jsxFilePath, jsxFileContent);
