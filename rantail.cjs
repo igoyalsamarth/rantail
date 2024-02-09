@@ -3,7 +3,7 @@ const path = require('path');
 const glob = require('glob');
 
 // Read the configuration file
-const config = require('./rantail.config.js');
+const config = require('./rantail.config.cjs');
 
 // Generate a random class name
 const generateRandomString = () => {
