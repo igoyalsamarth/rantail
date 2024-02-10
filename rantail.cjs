@@ -21,8 +21,8 @@ const generateRandomString = () => {
 
 const generateCUID = () => {
   const cuid = init({length:12})
-  console.log(cuid)
-  return cuid
+  console.log(cuid())
+  return cuid()
 }
 
 // Define the CSS file path
