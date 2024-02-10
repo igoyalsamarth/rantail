@@ -36,8 +36,7 @@ for (const pattern of config.content) {
     let jsxFileContent = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-      const originalClassNames = match[2].split(' ');
-
+      const originalClassNames = (match[2] ? match[2] : match[3]).split(' ');
       let newClassNames = '';
       for (const originalClassName of originalClassNames) {
         // If the class name is not in the tailwindClasses object, generate a new random class name for it
