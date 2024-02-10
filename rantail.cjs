@@ -1,11 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
+const {init} = require('@paralleldrive/cuid2')
 
 // Read the configuration file
 const config = require('./rantail.config.cjs');
 
 // Generate a random class name
+/*
 const generateRandomString = () => {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -15,6 +17,12 @@ const generateRandomString = () => {
   }
   return result;
 };
+*/
+
+const generateCUID = () => {
+  const cuid = init({length:12})
+  return cuid
+}
 
 // Define the CSS file path
 const cssFilePath = path.join(__dirname, '/src/index.css');
@@ -45,7 +53,7 @@ for (const pattern of config.content) {
       for (const originalClassName of originalClassNames) {
         // If the class name is not in the tailwindClasses object, generate a new random class name for it
         if (!tailwindClasses[originalClassName]) {
-          const randomClassName = generateRandomString();
+          const randomClassName = generateCUID();
           tailwindClasses[originalClassName] = randomClassName;
 
           // Add the styles to the CSS file
