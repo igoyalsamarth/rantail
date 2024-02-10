@@ -31,41 +31,37 @@ const tailwindClasses = {};
 // Loop through each content pattern in the configuration file
 for (const pattern of config.content) {
   // Use glob to match the file pattern
-  glob(pattern, (err, files) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  const files = glob.sync(pattern);
+  console.log(files)
 
-    // Loop through each matched file
-    for (const file of files) {
-      // Read the JSX file
-      let jsxFileContent = fs.readFileSync(file, 'utf8');
+  // Loop through each matched file
+  for (const file of files) {
+    // Read the JSX file
+    let jsxFileContent = fs.readFileSync(file, 'utf8');
 
-      while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-        const originalClassNames = match[2].split(' ');
+    while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
+      const originalClassNames = match[2].split(' ');
 
-        let newClassNames = '';
-        for (const originalClassName of originalClassNames) {
-          // If the class name is not in the tailwindClasses object, generate a new random class name for it
-          if (!tailwindClasses[originalClassName]) {
-            const randomClassName = generateRandomString();
-            tailwindClasses[originalClassName] = randomClassName;
+      let newClassNames = '';
+      for (const originalClassName of originalClassNames) {
+        // If the class name is not in the tailwindClasses object, generate a new random class name for it
+        if (!tailwindClasses[originalClassName]) {
+          const randomClassName = generateRandomString();
+          tailwindClasses[originalClassName] = randomClassName;
 
-            // Add the styles to the CSS file
-            cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
-            fs.appendFileSync(cssFilePath, cssContent);
-          }
-
-          newClassNames += tailwindClasses[originalClassName] + ' ';
+          // Add the styles to the CSS file
+          cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
+          fs.appendFileSync(cssFilePath, cssContent);
         }
 
-        // Replace the class name in the JSX file
-        jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${match[2]}\\1`, 'g'), `className=$1${newClassNames.trim()}$1`);
+        newClassNames += tailwindClasses[originalClassName] + ' ';
       }
 
-      // Write the modified JSX file
-      fs.writeFileSync(file, jsxFileContent);
+      // Replace the class name in the JSX file
+      jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${match[2]}\\1`, 'g'), `className=$1${newClassNames.trim()}$1`);
     }
-  });
+
+    // Write the modified JSX file
+    fs.writeFileSync(file, jsxFileContent);
+  }
 }
