@@ -41,6 +41,9 @@ for (const pattern of config.content) {
       let newClassNames = '';
       for (const originalClassName of originalClassNames) {
         // If the class name is not in the tailwindClasses object, generate a new random class name for it
+        if (!/^[a-z-]+$/.test(originalClassName)) {
+          continue;
+        }
         if (!tailwindClasses[originalClassName]) {
           const randomClassName = generateCUID();
           tailwindClasses[originalClassName] = randomClassName;
