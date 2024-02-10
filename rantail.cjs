@@ -1,14 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
-const {init} = require('@paralleldrive/cuid2')
+const { init } = require('@paralleldrive/cuid2')
 
 // Read the configuration file
 const config = require('./rantail.config.cjs');
 
 // Generate a random class name
 const generateCUID = () => {
-  const cuid = init({length:12})
+  const cuid = init({ length: 12 })
   console.log(cuid())
   return cuid()
 }
@@ -24,6 +24,7 @@ fs.writeFileSync(cssFilePath, cssContent);
 const classNameRegex = /className=(['"])(.*?)\1|className={`([^`]*?)`}/g;
 let match;
 const tailwindClasses = {};
+let replacements = {};
 
 // Loop through each content pattern in the configuration file
 for (const pattern of config.content) {
@@ -36,39 +37,31 @@ for (const pattern of config.content) {
     let jsxFileContent = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-      const originalClassNames = (match[2] || match[3]).replace(/`/g, '').split(' ');
-
-      let newClassNames = '';
+      const originalClassNames = (match[2] || match[3]).replace(/`|'|"|{|}/g, '').split(' ');
       for (const originalClassName of originalClassNames) {
-        // If the class name is not in the tailwindClasses object, generate a new random class name for it
-        if (!/^[a-z-]+$/.test(originalClassName)) {
+        if (!/^[a-z0-9-:]+$/.test(originalClassName) || originalClassName.length < 3) {
           continue;
         }
         if (!tailwindClasses[originalClassName]) {
           const randomClassName = generateCUID();
           tailwindClasses[originalClassName] = randomClassName;
-
+          replacements[originalClassName] = randomClassName;
+      
           // Add the styles to the CSS file
-          cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
+          let cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
           fs.appendFileSync(cssFilePath, cssContent);
         }
-
-        newClassNames += tailwindClasses[originalClassName] + ' ';
       }
-
-      // Replace the class name in the JSX file
-      jsxFileContent = jsxFileContent.replace(new RegExp(`(className=(['"])${match[2]}\\2|className={\`${match[3]}\`})`, 'g'), (match, p1, p2, p3) => {
-        if (p2) {
-          // If the match is a class name enclosed in quotes
-          return `className=${p2}${newClassNames.trim()}${p2}`;
-        } else {
-          // If the match is a class name enclosed in backticks inside curly braces
-          return `className={\`${newClassNames.trim()}\`}`;
-        }
-      });
-
-      // Write the modified JSX file
-      fs.writeFileSync(file, jsxFileContent);
     }
+    
+    // Replace the class names in the JSX file
+    for (let key in replacements) {
+      let value = replacements[key];
+      let regex = new RegExp(`\\b${key}\\b`, 'g');
+      jsxFileContent = jsxFileContent.replace(regex, value);
+    }
+
+    // Write the modified JSX file
+    fs.writeFileSync(file, jsxFileContent);
   }
 }
