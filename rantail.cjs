@@ -1,14 +1,15 @@
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
-const {init} = require('@paralleldrive/cuid2')
+const { init } = require('@paralleldrive/cuid2')
 
 // Read the configuration file
 const config = require('./rantail.config.cjs');
 
 // Generate a random class name
 const generateCUID = () => {
-  const cuid = init({length:12})
+  const cuid = init({ length: 12 })
+  console.log(cuid())
   return cuid()
 }
 
@@ -19,8 +20,8 @@ const cssFilePath = path.join(__dirname, '/src/index.css');
 let cssContent = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
 fs.writeFileSync(cssFilePath, cssContent);
 
-// Use a regular expression to match all class names and values enclosed in {``} in the JSX file
-const classNameRegex = /className=(['"])(.*?)\1|{(`[^`]*`)}/g;
+// Use a regular expression to match all class names in the JSX file
+const classNameRegex = /className=(['"])(.*?)\1|className={(`[^`]*`)}/g;
 let match;
 const tailwindClasses = {};
 
@@ -35,8 +36,7 @@ for (const pattern of config.content) {
     let jsxFileContent = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-      // Check if the match is a class name or a value enclosed in {``}
-      const originalClassNames = (match[2] || match[3]).split(' ');
+      const originalClassNames = match[2].split(' ');
 
       let newClassNames = '';
       for (const originalClassName of originalClassNames) {
@@ -53,8 +53,16 @@ for (const pattern of config.content) {
         newClassNames += tailwindClasses[originalClassName] + ' ';
       }
 
-      // Replace the class name or the value enclosed in {``} in the JSX file
-      jsxFileContent = jsxFileContent.replace(new RegExp(`(className=(['"])${match[2]}\\2|{${match[3]}})`, 'g'), `className=$2${newClassNames.trim()}$2`);
+      // Replace the class name in the JSX file
+      jsxFileContent = jsxFileContent.replace(new RegExp(`(className=(['"])${match[2]}\\2|className={${match[3]}})`, 'g'), (match, p1, p2, p3) => {
+        if (p2) {
+          // If the match is a class name enclosed in quotes
+          return `className=${p2}${newClassNames.trim()}${p2}`;
+        } else {
+          // If the match is a class name enclosed in backticks inside curly braces
+          return `className={\`${newClassNames.trim()}\`}`;
+        }
+      });
     }
 
     // Write the modified JSX file
