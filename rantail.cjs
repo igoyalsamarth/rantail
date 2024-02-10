@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { glob } = require('glob');
+const fg = require('fast-glob');
 
 // Read the configuration file
 const config = require('./rantail.config.cjs');
@@ -30,9 +30,8 @@ const tailwindClasses = {};
 
 // Loop through each content pattern in the configuration file
 for (const pattern of config.content) {
-  // Use glob to match the file pattern
-  const files = glob.sync(pattern);
-  console.log(files)
+  // Use fast-glob to match the file pattern
+  const files = fg.globSync(pattern);
 
   // Loop through each matched file
   for (const file of files) {
