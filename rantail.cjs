@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const glob = require('glob');
+const { glob } = require('glob');
 
 // Read the configuration file
 const config = require('./rantail.config.cjs');
