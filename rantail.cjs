@@ -1,14 +1,14 @@
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
-const { init } = require('@paralleldrive/cuid2')
+const {init} = require('@paralleldrive/cuid2')
 
 // Read the configuration file
 const config = require('./rantail.config.cjs');
 
 // Generate a random class name
 const generateCUID = () => {
-  const cuid = init({ length: 12 })
+  const cuid = init({length:12})
   console.log(cuid())
   return cuid()
 }
@@ -36,7 +36,8 @@ for (const pattern of config.content) {
     let jsxFileContent = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-      const originalClassNames = (match[2] ? match[2] : match[3]).split(' ');
+      const originalClassNames = (match[2] || match[3]).split(' ');
+
       let newClassNames = '';
       for (const originalClassName of originalClassNames) {
         // If the class name is not in the tailwindClasses object, generate a new random class name for it
