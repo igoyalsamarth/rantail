@@ -7,21 +7,8 @@ const {init} = require('@paralleldrive/cuid2')
 const config = require('./rantail.config.cjs');
 
 // Generate a random class name
-/*
-const generateRandomString = () => {
-  let result = '';
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-  const charactersLength = characters.length;
-  for (let i = 0; i < 10; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-};
-*/
-
 const generateCUID = () => {
   const cuid = init({length:12})
-  console.log(cuid())
   return cuid()
 }
 
@@ -32,8 +19,8 @@ const cssFilePath = path.join(__dirname, '/src/index.css');
 let cssContent = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
 fs.writeFileSync(cssFilePath, cssContent);
 
-// Use a regular expression to match all class names in the JSX file
-const classNameRegex = /className=(['"])(.*?)\1/g;
+// Use a regular expression to match all class names and values enclosed in {``} in the JSX file
+const classNameRegex = /className=(['"])(.*?)\1|{(`[^`]*`)}/g;
 let match;
 const tailwindClasses = {};
 
@@ -48,7 +35,8 @@ for (const pattern of config.content) {
     let jsxFileContent = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
-      const originalClassNames = match[2].split(' ');
+      // Check if the match is a class name or a value enclosed in {``}
+      const originalClassNames = (match[2] || match[3]).split(' ');
 
       let newClassNames = '';
       for (const originalClassName of originalClassNames) {
@@ -65,8 +53,8 @@ for (const pattern of config.content) {
         newClassNames += tailwindClasses[originalClassName] + ' ';
       }
 
-      // Replace the class name in the JSX file
-      jsxFileContent = jsxFileContent.replace(new RegExp(`className=(['"])${match[2]}\\1`, 'g'), `className=$1${newClassNames.trim()}$1`);
+      // Replace the class name or the value enclosed in {``} in the JSX file
+      jsxFileContent = jsxFileContent.replace(new RegExp(`(className=(['"])${match[2]}\\2|{${match[3]}})`, 'g'), `className=$2${newClassNames.trim()}$2`);
     }
 
     // Write the modified JSX file
