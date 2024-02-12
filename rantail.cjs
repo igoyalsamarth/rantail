@@ -30,9 +30,12 @@ for (const pattern of config.content) {
   // Use fast-glob to match the file pattern
   const files = fg.globSync(pattern);
 
+  console.log(`Total number of files: ${files.length}`);
+
   // Loop through each matched file
   for (const file of files) {
     // Read the JSX file
+    console.log(`Processing file: ${file}`);
     let jsxFileContent = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
@@ -52,8 +55,6 @@ for (const pattern of config.content) {
         }
       }
     }
-
-    console.log(replacements)
 
     // Replace the class names in the JSX file
     for (let key in replacements) {
