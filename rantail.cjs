@@ -9,7 +9,6 @@ const config = require('./rantail.config.cjs');
 // Generate a random class name
 const generateCUID = () => {
   const cuid = init({ length: 12 })
-  console.log(cuid())
   return cuid()
 }
 
@@ -39,7 +38,7 @@ for (const pattern of config.content) {
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
       const originalClassNames = (match[2] || match[3]).replace(/`|'|"|{|}/g, '').split(' ');
       for (const originalClassName of originalClassNames) {
-        if (!/^[a-z0-9-:]+(\[\w+\])?$/.test(originalClassName) || originalClassName.length < 3) {
+        if (!/^[a-z0-9-:\\[\]\\]+$/.test(originalClassName) || originalClassName.length < 3) {
           continue;
         }
         if (!tailwindClasses[originalClassName]) {
@@ -54,10 +53,14 @@ for (const pattern of config.content) {
       }
     }
 
+    console.log(replacements)
+
     // Replace the class names in the JSX file
     for (let key in replacements) {
       let value = replacements[key];
-      let regex = new RegExp(`\\b${key}\\b`, 'g');
+      // Escape special characters in the key
+      let escapedKey = key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+      let regex = new RegExp(escapedKey, 'g');
       jsxFileContent = jsxFileContent.replace(regex, value);
     }
 
