@@ -39,7 +39,7 @@ for (const pattern of config.content) {
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
       const originalClassNames = (match[2] || match[3]).replace(/`|'|"|{|}/g, '').split(' ');
       for (const originalClassName of originalClassNames) {
-        if (!/^[a-z0-9-:\\[\\]]+$/.test(originalClassName) || originalClassName.length < 3) {
+        if (!/^[a-z0-9-:\\[\\]\\]+$/.test(originalClassName) || originalClassName.length < 3) {
           continue;
         }
         if (!tailwindClasses[originalClassName]) {
