@@ -25,6 +25,7 @@
   "homepage": "https://github.com/igoyalsamarth/rantail#readme",
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
-    "fast-glob": "^3.3.2"
+    "fast-glob": "^3.3.2",
+    "glob": "^10.3.10"
   }
 }
