@@ -1,0 +1,30 @@
+{
+  "name": "rantail",
+  "version": "0.0.0",
+  "description": "Convert your tailwind css classes to random values for a scrape and theft safe code",
+  "main": "rantail.cjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igoyalsamarth/rantail.git"
+  },
+  "keywords": [
+    "tailwindCSS",
+    "anti-scrape",
+    "anti-theft",
+    "cuid2",
+    "class-to-cuid2"
+  ],
+  "author": "Samarth Goyal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igoyalsamarth/rantail/issues"
+  },
+  "homepage": "https://github.com/igoyalsamarth/rantail#readme",
+  "dependencies": {
+    "@paralleldrive/cuid2": "^2.2.2",
+    "fast-glob": "^3.3.2"
+  }
+}
