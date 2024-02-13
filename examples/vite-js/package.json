@@ -13,7 +13,7 @@
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
     "axios": "^1.6.5",
-    "glob": "^10.3.10",
+    "fast-glob": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-iframe": "^1.8.5"
