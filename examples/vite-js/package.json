@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "generate-styles": "node rantail.cjs",
+    "generate-styles": "node ../../packages/rantail/rantail.cjs",
     "build": "npm run generate-styles && vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
