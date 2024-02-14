@@ -1,12 +1,15 @@
 import { TailwindClasses } from "./interface";
 
+console.log('about to run script')
+
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
 const { init } = require('@paralleldrive/cuid2')
 
 // Read the configuration file
-const config = require('./rantail.config.cjs');
+let rawConfig = fs.readFileSync('rantail.config.json');
+let config = JSON.parse(rawConfig);
 
 // Generate a random class name
 const generateCUID = (): string => {
