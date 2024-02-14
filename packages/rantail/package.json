@@ -23,7 +23,7 @@
   },
   "license": "ISC",
   "bin": {
-    "rantail": "./bin/next-sitemap.mjs"
+    "rantail": "./bin/rantail.cjs"
   },
   "bugs": {
     "url": "https://github.com/igoyalsamarth/rantail/issues"
