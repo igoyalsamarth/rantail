@@ -1,15 +1,34 @@
 import { TailwindClasses } from "./interface";
+const path = require('path');
+const minimist = require('minimist');
+const fs = require('fs');
+
+
+export const getPath = (...pathSegment: string[]): string => {
+  return path.resolve(process.cwd(), ...pathSegment)
+}
+
+export const getConfigFilePath = async () => {
+  // Extract args from command
+  const args = minimist(process.argv.slice(2))
+
+  // Config file path
+  const configPath = getPath(args.config || 'rantail.config.cjs')
+
+  // Check file stat
+  return configPath;
+}
+
+export const main = async() => {
 
 console.log('about to run script')
-
-const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
 const { init } = require('@paralleldrive/cuid2')
 
+let config =await require(await getConfigFilePath())
 // Read the configuration file
-let rawConfig = fs.readFileSync('rantail.config.json');
-let config = JSON.parse(rawConfig);
+
 
 // Generate a random class name
 const generateCUID = (): string => {
@@ -18,7 +37,7 @@ const generateCUID = (): string => {
 }
 
 // Define the CSS file path
-const cssFilePath: string = path.join(__dirname, '/src/index.css');
+const cssFilePath: string = path.join((await getConfigFilePath()).replace('rantail.config.cjs',''), 'src/index.css');
 
 // Add the base Tailwind CSS directives to the CSS file
 let cssContent: string = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
@@ -70,4 +89,5 @@ for (const pattern of config.content) {
     // Write the modified JSX file
     fs.writeFileSync(file, jsxFileContent);
   }
+}
 }

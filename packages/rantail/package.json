@@ -5,8 +5,9 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
-      "dist"
-   ],  "scripts": {
+    "dist"
+  ],
+  "scripts": {
     "build": "tsup",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,7 +36,8 @@
   "homepage": "https://github.com/igoyalsamarth/rantail#readme",
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
-    "fast-glob": "^3.3.2"
+    "fast-glob": "^3.3.2",
+    "minimist": "^1.2.8"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
