@@ -1,3 +1,5 @@
+import { TailwindClasses } from "./interface";
+
 const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
@@ -7,33 +9,33 @@ const { init } = require('@paralleldrive/cuid2')
 const config = require('./rantail.config.cjs');
 
 // Generate a random class name
-const generateCUID = () => {
-  const cuid = init({ length: 12 })
-  return cuid()
+const generateCUID = (): string => {
+  const cuid = init({ length: 12 });
+  return cuid();
 }
 
 // Define the CSS file path
-const cssFilePath = path.join(__dirname, '/src/index.css');
+const cssFilePath: string = path.join(__dirname, '/src/index.css');
 
 // Add the base Tailwind CSS directives to the CSS file
-let cssContent = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
+let cssContent: string = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
 fs.writeFileSync(cssFilePath, cssContent);
 
 // Use a regular expression to match all class names in the JSX file
-const classNameRegex = /className=(['"])(.*?)\1|className={`([^`]*?)`}/g;
-let match;
-const tailwindClasses = {};
-let replacements = {};
+const classNameRegex: RegExp = /className=(['"])(.*?)\1|className={`([^`]*?)`}/g;
+let match: RegExpExecArray | null;
+const tailwindClasses: TailwindClasses = {};
+let replacements: TailwindClasses = {};
 
 // Loop through each content pattern in the configuration file
 for (const pattern of config.content) {
   // Use fast-glob to match the file pattern
-  const files = fg.globSync(pattern);
+  const files: string[] = fg.globSync(pattern);
   // Loop through each matched file
   for (const file of files) {
     // Read the JSX file
     console.log(`Processing file: ${file}`);
-    let jsxFileContent = fs.readFileSync(file, 'utf8');
+    let jsxFileContent: string = fs.readFileSync(file, 'utf8');
 
     while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
       const originalClassNames = (match[2] || match[3]).replace(/`|'|"|{|}/g, '').split(' ');
@@ -42,12 +44,12 @@ for (const pattern of config.content) {
           continue;
         }
         if (!tailwindClasses[originalClassName]) {
-          const randomClassName = generateCUID();
+          const randomClassName: string = generateCUID();
           tailwindClasses[originalClassName] = randomClassName;
           replacements[originalClassName] = randomClassName;
 
           // Add the styles to the CSS file
-          let cssContent = `.${randomClassName} { @apply ${originalClassName}; }\n`;
+          let cssContent: string = `.${randomClassName} { @apply ${originalClassName}; }\n`;
           fs.appendFileSync(cssFilePath, cssContent);
         }
       }

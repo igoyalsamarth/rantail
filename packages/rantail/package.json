@@ -17,8 +17,14 @@
     "cuid2",
     "class-to-cuid2"
   ],
-  "author": "Samarth Goyal",
+  "author": {
+    "name": "Goyal Samarth",
+    "url": "https://www.goyalsamarth.com"
+  },
   "license": "ISC",
+  "bin": {
+    "rantail": "./bin/next-sitemap.mjs"
+  },
   "bugs": {
     "url": "https://github.com/igoyalsamarth/rantail/issues"
   },
@@ -26,5 +32,9 @@
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
     "fast-glob": "^3.3.2"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   }
 }
