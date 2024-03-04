@@ -1,7 +1,5 @@
-const path = require('path');
-const minimist = require('minimist');
-
-
+const path = require("path");
+const minimist = require("minimist");
 
 /**
  * Return absolute path from path segments
@@ -10,16 +8,16 @@ const minimist = require('minimist');
  */
 
 export const getPath = (...pathSegment: string[]): string => {
-    return path.resolve(process.cwd(), ...pathSegment)
-  }
+  return path.resolve(process.cwd(), ...pathSegment);
+};
 
-  export const getConfigFilePath = async () => {
-    // Extract args from command
-    const args = minimist(process.argv.slice(2))
-  
-    // Config file path
-    const configPath = getPath(args.config || 'rantail.config.cjs')
-  
-    // Check file stat
-    return configPath;
-  }
+export const getConfigFilePath = async () => {
+  // Extract args from command
+  const args = minimist(process.argv.slice(2));
+
+  // Config file path
+  const configPath = getPath(args.config || "rantail.config.cjs");
+
+  // Check file stat
+  return configPath;
+};
