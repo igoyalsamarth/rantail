@@ -1,23 +1,9 @@
 import { TailwindClasses } from "./interface";
+import { getConfigFilePath } from "./utils/path";
 const path = require('path');
 const minimist = require('minimist');
 const fs = require('fs');
 
-
-export const getPath = (...pathSegment: string[]): string => {
-  return path.resolve(process.cwd(), ...pathSegment)
-}
-
-export const getConfigFilePath = async () => {
-  // Extract args from command
-  const args = minimist(process.argv.slice(2))
-
-  // Config file path
-  const configPath = getPath(args.config || 'rantail.config.cjs')
-
-  // Check file stat
-  return configPath;
-}
 
 export const main = async() => {
 
