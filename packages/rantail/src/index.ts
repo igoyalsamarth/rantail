@@ -1,38 +1,27 @@
 import { TailwindClasses } from "./interface";
-import { getConfigFilePath } from "./utils/path";
-const path = require('path');
-const minimist = require('minimist');
-const fs = require('fs');
-
+import { generateCUID } from "./utils/cuid";
+import { getCSSFilePath, getConfigFilePath } from "./utils/path";
+import fs from 'node:fs'
+import * as fg from 'fast-glob'
 
 export const main = async() => {
 
-console.log('about to run script')
-const path = require('path');
-const fg = require('fast-glob');
-const { init } = require('@paralleldrive/cuid2')
 
-let config =await require(await getConfigFilePath())
 // Read the configuration file
-
-
-// Generate a random class name
-const generateCUID = (): string => {
-  const cuid = init({ length: 12 });
-  return cuid();
-}
+let config =await require(await getConfigFilePath())
 
 // Define the CSS file path
-const cssFilePath: string = path.join((await getConfigFilePath()).replace('rantail.config.cjs',''), 'src/index.css');
+let cssFilePath =await require(await getCSSFilePath())
 
 // Add the base Tailwind CSS directives to the CSS file
 let cssContent: string = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
+
 fs.writeFileSync(cssFilePath, cssContent);
 
 // Use a regular expression to match all class names in the JSX file
 const classNameRegex: RegExp = /className=(['"])(.*?)\1|className={`([^`]*?)`}/g;
+
 let match: RegExpExecArray | null;
-const tailwindClasses: TailwindClasses = {};
 let replacements: TailwindClasses = {};
 
 // Loop through each content pattern in the configuration file
@@ -51,9 +40,8 @@ for (const pattern of config.content) {
         if (!/^[a-z0-9-:\\[\]\\]+$/.test(originalClassName) || originalClassName.length < 3) {
           continue;
         }
-        if (!tailwindClasses[originalClassName]) {
+        if (!replacements[originalClassName]) {
           const randomClassName: string = generateCUID();
-          tailwindClasses[originalClassName] = randomClassName;
           replacements[originalClassName] = randomClassName;
 
           // Add the styles to the CSS file
