@@ -3,15 +3,22 @@ import { generateCUID } from "./utils/cuid";
 import { getCSSFilePath, getConfigFilePath } from "./utils/path";
 import fs from 'node:fs'
 import * as fg from 'fast-glob'
+import util from 'util'
 
 export const main = async() => {
 
+console.log('Rantail is running...')
+
 
 // Read the configuration file
-let config =await require(await getConfigFilePath())
+let config = await import( await getConfigFilePath())
+
+console.log(config)
+
+const readFile = util.promisify(fs.readFile);
 
 // Define the CSS file path
-let cssFilePath =await require(await getCSSFilePath())
+let cssFilePath = await getCSSFilePath();
 
 // Add the base Tailwind CSS directives to the CSS file
 let cssContent: string = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
@@ -25,7 +32,7 @@ let match: RegExpExecArray | null;
 let replacements: TailwindClasses = {};
 
 // Loop through each content pattern in the configuration file
-for (const pattern of config.content) {
+for (const pattern of config.default.content) {
   // Use fast-glob to match the file pattern
   const files: string[] = fg.globSync(pattern);
   // Loop through each matched file

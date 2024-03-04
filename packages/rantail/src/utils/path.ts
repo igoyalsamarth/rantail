@@ -19,18 +19,21 @@ export const getPath = (...pathSegment: string[]): string => {
  * @returns
  */
 
-export const getConfigFilePath = async() => {
+export const getConfigFilePath = async () => {
   // Extract args from command
-  const args = minimist(process.argv.slice(2));
+  const args = minimist(process.argv.slice(2))
 
   // Config file path
-  const configPath = getPath(args.config || "rantail.config.cjs");
+  const configPath = getPath(args.config || 'rantail.config.cjs')
 
   // Check file stat
+
+  console.log(configPath)
+
   return fs
-  .stat(configPath)
-  .then(() => pathToFileURL(configPath).toString())
-};
+    .stat(configPath)
+    .then(() => pathToFileURL(configPath).toString())
+}
 
 /**
  * Returns path of main css file  (to be integrated with config file)
@@ -40,10 +43,8 @@ export const getConfigFilePath = async() => {
 
 export const getCSSFilePath = async() => {
     // Config file path
-    const configPath = getPath("index.css");
+    const configPath = getPath("src/index.css");
   
     // Check file stat
-    return fs
-    .stat(configPath)
-    .then(() => pathToFileURL(configPath).toString())
+    return configPath
   };
