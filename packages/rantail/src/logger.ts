@@ -1,11 +1,12 @@
 export class Logger {
+
   /**
    * Generic error logger
    * @param text
    * @returns
    */
   static error(...text: string[]) {
-    return console.error(`\x1b[31m`, `❌`, `[rantail]`, ...text);
+    return console.error(`❌`, `[rantail]`, ...text);
   }
 
   /**
@@ -14,12 +15,37 @@ export class Logger {
    * @param text
    */
   static log(emoji: string, ...text: string[]): any {
-    return console.log(emoji, `[rantail]`, ...text);
+    return console.log(emoji, `[rantail]:`, ...text);
   }
 
+  /**
+   * Generic success logger
+   * @param
+   * @returns
+   */
+
   static generationCompleted() {
-    // Initial stats
     Logger.log(`✅`, 'Generation completed')
+  }
+
+  /**
+  * Generic file process logger
+  * @param
+  * @returns
+  */
+
+  static logFile(fileName: string) {
+    Logger.log(`❗`, `Processing File`, fileName)
+  }
+
+  /**
+  * Generic config loader logger
+  * @param
+  * @returns
+  */
+
+  static loadingConfig(path: string) {
+    Logger.log(`✨`, `Loading Rantail config from `, path)
   }
 
 }

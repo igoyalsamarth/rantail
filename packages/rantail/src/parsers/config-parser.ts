@@ -4,16 +4,17 @@ import { withDefaultConfig } from "../utils/defaults"
 import { getConfigFilePath } from "../utils/path"
 
 export class ConfigParser {
-    /**
-   * Load rantail.config.js as module
-   * @returns
-   */
+  /**
+  * Load rantail.config.js as module
+  * @returns
+  */
+
   private async loadBaseConfig(): Promise<IConfig> {
     // Get config file path
     const path = await getConfigFilePath()
 
     // Config loading message
-    Logger.log('✨', `Loading rantail config:`, path)
+    Logger.loadingConfig(path)
 
     // Load base config
     const baseConfig = await import(path)

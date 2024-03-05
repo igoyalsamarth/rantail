@@ -11,7 +11,5 @@ export const defaultConfig: Partial<IConfig> = {
 }
 
 export const withDefaultConfig = (config: Partial<IConfig>): IConfig => {
-    // Add output.export config
-
     return overwriteMerge(defaultConfig, config)
 }
