@@ -5,7 +5,7 @@ export class Logger {
    * @returns
    */
   static error(...text: string[]) {
-    return console.error(`\x1b[31m`, `❌`, `[next-sitemap]`, ...text);
+    return console.error(`\x1b[31m`, `❌`, `[rantail]`, ...text);
   }
 
   /**
@@ -14,7 +14,7 @@ export class Logger {
    * @param text
    */
   static log(emoji: string, ...text: string[]): any {
-    return console.log(emoji, `[next-sitemap]`, ...text);
+    return console.log(emoji, `[rantail]`, ...text);
   }
 
   static generationCompleted() {
