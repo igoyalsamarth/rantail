@@ -35,11 +35,14 @@
   },
   "homepage": "https://github.com/igoyalsamarth/rantail#readme",
   "dependencies": {
+    "@corex/deepmerge": "^4.0.43",
     "@paralleldrive/cuid2": "^2.2.2",
     "fast-glob": "^3.3.2",
+    "lodash": "^4.17.21",
     "minimist": "^1.2.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"

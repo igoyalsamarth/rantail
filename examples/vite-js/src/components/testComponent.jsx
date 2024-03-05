@@ -1,7 +1,7 @@
 export default function TestComponent(){
     return(
-        <div className="jzwk3yt73lk9 rppurv95o69u smxnzltmdywd">
-            <button className="uv9i2luze89r">Test Button</button>
+        <div className="flex w-[500px] bg-orange-500">
+            <button className="bg-blue-500">Test Button</button>
         </div>
     );
 }

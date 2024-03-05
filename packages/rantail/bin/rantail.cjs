@@ -1,5 +1,4 @@
 #!/usr/bin/env node
 
-const { main } = require('../dist/index.js');
-
-main();
+const { CLI } = require('../dist/cli.js')
+new CLI().execute()
