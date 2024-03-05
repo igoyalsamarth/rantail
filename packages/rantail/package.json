@@ -35,7 +35,6 @@
   },
   "homepage": "https://github.com/igoyalsamarth/rantail#readme",
   "dependencies": {
-    "@corex/deepmerge": "^4.0.43",
     "@paralleldrive/cuid2": "^2.2.2",
     "fast-glob": "^3.3.2",
     "lodash": "^4.17.21",
