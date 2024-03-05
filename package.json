@@ -1,0 +1,23 @@
+{
+  "name": "rantail",
+  "version": "0.0.0",
+  "description": "Rantail: The Ultimate Companoion to Tailwind CSS. Do you want to write clean and secure code with Tailwind CSS? Do you want to prevent others from stealing your hard work? Then you need rantail, the tool that encodes your tailwind classes with unique and customizable cuid’s. With rantail, you can enjoy a smooth, encoded, and theftproof coding.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igoyalsamarth/rantail.git"
+  },
+  "keywords": [
+    "tailwindCSS",
+    "anti-scrape",
+    "anti-crawl",
+    "anti-theft",
+    "cuid2",
+    "class-to-cuid2"
+  ],
+  "author": "Samarth Goyal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igoyalsamarth/rantail/issues"
+  },
+  "homepage": "https://github.com/igoyalsamarth/rantail#readme"
+}

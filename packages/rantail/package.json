@@ -1,6 +1,6 @@
 {
   "name": "rantail",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Convert your tailwind css classes to random values for a scrape and theft safe code",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,7 @@
     "class-to-cuid2"
   ],
   "author": {
-    "name": "Goyal Samarth",
+    "name": "Samarth Goyal",
     "url": "https://www.goyalsamarth.com"
   },
   "license": "ISC",
@@ -37,9 +37,11 @@
   "dependencies": {
     "@paralleldrive/cuid2": "^2.2.2",
     "fast-glob": "^3.3.2",
+    "lodash": "^4.17.21",
     "minimist": "^1.2.8"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"
