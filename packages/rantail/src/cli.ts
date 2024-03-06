@@ -15,13 +15,9 @@ export class CLI {
     const configParser = new ConfigParser()
     const { config } = await configParser.loadConfig()
 
-    console.log(config)
-
     let cssFilePath = await getCSSFilePath();
 
-    let cssContent: string = '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
-
-    fs.writeFileSync(cssFilePath, cssContent);
+    fs.appendFileSync(cssFilePath, '\n');
 
     const classNameRegex: RegExp = /className=(['"])(.*?)\1|className={`([^`]*?)`}/g;
 
@@ -40,11 +36,11 @@ export class CLI {
         while ((match = classNameRegex.exec(jsxFileContent)) !== null) {
           const originalClassNames = (match[2] || match[3]).replace(/`|'|"|{|}/g, '').split(' ');
           for (const originalClassName of originalClassNames) {
-            if (!/^[a-z0-9-:\\[\]\\]+$/.test(originalClassName) || originalClassName.length < 3) {
+            if (!/^[a-z0-9-:\\[\]\\]+$/.test(originalClassName) || originalClassName.length < 3 || (config.ignore && originalClassName.startsWith(config.ignore))) {
               continue;
             }
             if (!replacements[originalClassName]) {
-              const randomClassName: string = generateCUID();
+              const randomClassName: string = generateCUID(config.cuidLength, config.prefix, config.suffix);
               replacements[originalClassName] = randomClassName;
 
               // Add the styles to the CSS file

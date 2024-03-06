@@ -7,7 +7,8 @@ export const defaultConfig: Partial<IConfig> = {
         './components/**/*.{js,jsx}',
         './app/**/*.{js,jsx}',
         './src/**/*.{js,jsx}',
-    ]
+    ],
+    cuidLength: 12
 }
 
 export const withDefaultConfig = (config: Partial<IConfig>): IConfig => {
