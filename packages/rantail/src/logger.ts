@@ -48,4 +48,7 @@ export class Logger {
     Logger.log(`✨`, `Loading Rantail config from `, path)
   }
 
+  static loadingCSS(path:string){
+    Logger.log(`✨`, `Loading main CSS file from `, path)
+  }
 }

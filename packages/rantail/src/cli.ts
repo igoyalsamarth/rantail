@@ -15,7 +15,7 @@ export class CLI {
     const configParser = new ConfigParser()
     const { config } = await configParser.loadConfig()
 
-    let cssFilePath = await getCSSFilePath();
+    let cssFilePath = await getCSSFilePath(config.cssFilePath);
 
     fs.appendFileSync(cssFilePath, '\n');
 
@@ -73,5 +73,4 @@ export class CLI {
   async execute() {
     return this.main().then(Logger.generationCompleted).catch(Logger.error)
   }
-
 }

@@ -9,22 +9,42 @@ export interface IConfig {
   content: Array<string>;
 
   /**
+   * main css file location from the start
+   * @type {string}
+   * @default undefined
+   * @example 'src/index.css'
+   */
+  cssFilePath: string;
+
+  /**
+   * cuid css selectors length
+   * @type {number}
+   * @default 12
+   * @example 5
+   */
+  cuidLength: number;
+
+  /**
    * suffix of the css selectors
+   * @type {string}
+   * @default undefined
+   * @example '_'
    */
   suffix?: string;
 
   /**
    * prefix of the css selectors
+   * @type {string}
+   * @default undefined
+   * @example '_'
    */
   prefix?: string;
 
   /**
-   * cuid css selectors length
-   */
-  cuidLength: number;
-
-  /**
    * ignore character
+   * @type {string}
+   * @default undefined
+   * @example '_'
    */
   ignore?: string;
 }

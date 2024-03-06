@@ -19,7 +19,7 @@ export class ConfigParser {
     // Load base config
     const baseConfig = await import(path)
 
-    if (!baseConfig.default) {
+    if (!baseConfig?.default) {
       throw new Error('Unable to import rantail config file')
     }
 

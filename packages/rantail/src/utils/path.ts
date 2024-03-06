@@ -2,6 +2,7 @@ import path from 'node:path';
 const minimist = require("minimist");
 import fs from 'node:fs/promises'
 import { pathToFileURL } from 'url'
+import { Logger } from '../logger';
 
 /**
  * Returns absolute path from path segments
@@ -22,7 +23,7 @@ export const getPath = (...pathSegment: string[]): string => {
 export const getConfigFilePath = async () => {
 
   const args = minimist(process.argv.slice(2))
-  const configPath = getPath(args.config || 'rantail.config.cjs')
+  const configPath = getPath(args.config || 'rantail.config.js')
 
   return fs
     .stat(configPath)
@@ -35,10 +36,16 @@ export const getConfigFilePath = async () => {
  * @returns
  */
 
-export const getCSSFilePath = async () => {
+export const getCSSFilePath = async (cssFilePath: string) => {
   
-  const cssFilePath = getPath("src/index.css");
+  if (!cssFilePath) {
+    throw new Error('CSS File Path is not declared in the config File, continuing with unencoded code build.');
+  }
+
+  const fullCssFilePath = getPath(cssFilePath);
+
+  Logger.loadingCSS(fullCssFilePath)
 
   // Check file stat
-  return cssFilePath
+  return fullCssFilePath;
 };
