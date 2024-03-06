@@ -1,1 +1,1 @@
-![rantail](https://github.com/igoyalsamarth/rantail/assets/57109762/4afdc613-4da9-4280-8ed0-43a36b997ac2)
+![rantail](https://github.com/igoyalsamarth/rantail/assets/57109762/d265c5ff-efae-4c98-89a3-6ede57421e11)
