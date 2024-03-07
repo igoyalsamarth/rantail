@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild":"rantail --config awesome.config.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
