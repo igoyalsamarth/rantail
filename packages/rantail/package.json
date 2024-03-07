@@ -1,7 +1,7 @@
 {
   "name": "rantail",
   "version": "0.0.1",
-  "description": "Convert your tailwind css classes to random values for a scrape and theft safe code",
+  "description": "The ultimate companion for Tailwind CSS. Write clean and secure code effortlessly. Protect your work from theft with Rantail. Encode your Tailwind classes with unique and customizable cuid's. Enjoy smooth, encoded, and theft-proof coding.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
@@ -18,6 +18,7 @@
   "keywords": [
     "tailwindCSS",
     "anti-scrape",
+    "anti-crawl",
     "anti-theft",
     "cuid2",
     "class-to-cuid2"
@@ -26,7 +27,7 @@
     "name": "Samarth Goyal",
     "url": "https://www.goyalsamarth.com"
   },
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "rantail": "./bin/rantail.cjs"
   },
