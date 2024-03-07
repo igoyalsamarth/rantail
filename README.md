@@ -19,6 +19,7 @@
 - [Configuration Options](#configuration-options)
 - [Full configuration example](#full-configuration-example)
 - [Typescript JSDoc](#typescript-jsdoc)
+- [Important Information](#important-information)
 
 ## Getting started
 
@@ -74,7 +75,7 @@ You can also use a custom config file instead of `rantail.config.js`. Just pass 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
 | content                                             | The files for which conversion is required. Default ```['./pages/**/*.{js,jsx}', './components/**/*.{js,jsx}', './app/**/*.{js,jsx}', './src/**/*.{js,jsx}']```                                                                                                                                                                                                                                                                                                                                                                                                            | array of glob patterns                                                                                                                   |
 cssFilePath|Path from root where main CSS file is located.                                    | string                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| cuidLength (optional)                               | Length of the cuid's generated. Default `12`                                                                                                                                                                                                                                                                                                                                                                                                    | number                                                                                                                   |
+| cuidLength (optional)                               | Length of the cuid's generated. Default `12`. Visit [cuid2's docs](https://github.com/paralleldrive/cuid2) for collision rate calculation.                                                                                                                                                                                                                                                                                                                                                                                                   | number                                                                                                                   |
 | suffix (optional)                                 | Suffix to generated cuid's.                                                                                                                                                                                                                                                                                                                                                                                                              | string                                                                                                                   |
 | prefix (optional)                      | Prefix to generated cuid's                                                                                                                                                                                                                                                                                                                                                | string                                                                                                                   |
 | ignore (optional)                            | classNames starting with variable to be ignored when converting tailwind functions to cuid's                                                                                                                                                                                                                                                                                                                                                                       |       string|
@@ -171,6 +172,11 @@ module.exports = {
   // YOUR CONFIG
 }
 ```
+
+## Important Information
+
+Rantil is a pre-build feature that performs the conversion in your development code before the build process. When using it, exercise caution if you attempt to build it without a code copy. It is advisable to utilize hosting providers such as `Vercel`, `Netlify`, or `Cloudflare Pages`, etc, which build a copy of your code.
+
 
 ## Contribution
 
