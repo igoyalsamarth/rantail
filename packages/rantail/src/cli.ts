@@ -57,7 +57,7 @@ export class CLI {
           let value = replacements[key];
           // Escape special characters in the key
           let escapedKey = key.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
-          let regex = new RegExp(escapedKey, 'g');
+          let regex = new RegExp(`(?<![a-z0-9-_])${escapedKey}(?![a-z0-9-_])`, 'g');
           jsxFileContent = jsxFileContent.replace(regex, value);
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "rantail",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The ultimate companion for Tailwind CSS. Write clean and secure code effortlessly. Protect your work from theft with Rantail. Encode your Tailwind classes with unique and customizable cuid's. Enjoy smooth, encoded, and theft-proof coding.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
