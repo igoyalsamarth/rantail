@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Vollkorn } from "next/font/google";
+import { Vollkorn } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
 const voll = Vollkorn({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
