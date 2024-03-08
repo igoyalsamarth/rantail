@@ -1,11 +1,9 @@
 /** @type {import('rantail').IConfig} */
 
 
-const config = {
+module.exports ={
     suffix: '_',
     prefix: '_',
     cuidLength: 5,
     cssFilePath:'app/global.css',
 }
-
-export default config
