@@ -1,4 +1,4 @@
-[![BANNER](../../assets/banner.svg)](rantail.goyalsamarth.com)
+[![BANNER](./assets/banner.svg)](rantail.goyalsamarth.com)
 
 <div align="center">
 
@@ -18,7 +18,6 @@
     - [Custom config file](#custom-config-file)
 - [Configuration Options](#configuration-options)
 - [Full configuration example](#full-configuration-example)
-- [Typescript JSDoc](#typescript-jsdoc)
 - [Important Information](#important-information)
 
 ## Getting started
@@ -37,10 +36,10 @@ npm install rantail
 /** @type {import('rantail').IConfig} */
 const config = {
     content: [
-        './pages/**/*.{js,jsx}',
-        './components/**/*.{js,jsx}',
-        './app/**/*.{js,jsx}',
-        './src/**/*.{js,jsx}',
+        './pages/**/*.{js,jsx,ts,tsx}',
+        './components/**/*.{js,jsx,ts,tsx}',
+        './app/**/*.{js,jsx,ts,tsx}',
+        './src/**/*.{js,jsx,ts,tsx}',
     ],
     cssFilePath:'src/index.css',
     // ...other options
@@ -73,7 +72,7 @@ You can also use a custom config file instead of `rantail.config.js`. Just pass 
 
 | property                                            | description                                                                                                                                                                                                                                                                                                                                                                                                                          | type                                                                                                                     |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| content                                             | The files for which conversion is required. Default ```['./pages/**/*.{js,jsx}', './components/**/*.{js,jsx}', './app/**/*.{js,jsx}', './src/**/*.{js,jsx}']```                                                                                                                                                                                                                                                                                                                                                                                                            | array of glob patterns                                                                                                                   |
+| content                                             | The files for which conversion is required. Default ```['./pages/**/*.{js,jsx,ts,tsx}', './components/**/*.{js,jsx,ts,tsx}', './app/**/*.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}']```                                                                                                                                                                                                                                                                                                                                                                                                            | array of glob patterns                                                                                                                   |
 cssFilePath|Path from root where main CSS file is located.                                    | string                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | cuidLength (optional)                               | Length of the cuid's generated. Default `12`. Visit [cuid2's docs](https://github.com/paralleldrive/cuid2) for collision rate calculation.                                                                                                                                                                                                                                                                                                                                                                                                   | number                                                                                                                   |
 | suffix (optional)                                 | Suffix to generated cuid's.                                                                                                                                                                                                                                                                                                                                                                                                              | string                                                                                                                   |
@@ -89,10 +88,10 @@ Here's an example `rantail.config.js` configuration with all options
 
 const config = {
     content: [
-        './pages/**/*.{js,jsx}',
-        './components/**/*.{js,jsx}',
-        './app/**/*.{js,jsx}',
-        './src/**/*.{js,jsx}',
+        './pages/**/*.{js,jsx,ts,tsx}',
+        './components/**/*.{js,jsx,ts,tsx}',
+        './app/**/*.{js,jsx,ts,tsx}',
+        './src/**/*.{js,jsx,ts,tsx}',
     ],
     cssFilePath:'src/index.css',
     cuidLength: 5,
@@ -160,17 +159,6 @@ along with appending those values to the `.css` file to make it look like
 ._l9hdm_ { @apply bg-blue-500; }
 ._tpvzj_ { @apply flex; }
 ._ek8mx_ { @apply w-[500px]; }
-```
-
-## Typescript JSDoc
-
-Add the following line of code in your `rantail.config.js` for nice typescript autocomplete! 💖
-
-```js
-/** @type {import('rantail').IConfig} */
-module.exports = {
-  // YOUR CONFIG
-}
 ```
 
 ## Important Information
