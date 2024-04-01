@@ -1,4 +1,4 @@
-[![BANNER](./assets/banner.svg)](rantail.goyalsamarth.com)
+[![BANNER](../../assets/banner.svg)](rantail.goyalsamarth.com)
 
 <div align="center">
 
