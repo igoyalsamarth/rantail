@@ -2,8 +2,8 @@
   "name": "rantail",
   "version": "0.0.6",
   "description": "The ultimate companion for Tailwind CSS. Write clean and secure code effortlessly. Protect your work from theft with Rantail. Encode your Tailwind classes with unique and customizable cuid's. Enjoy smooth, encoded, and theft-proof coding.",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/cli.js",
+  "types": "./dist/cli.d.ts",
   "files": [
     "dist"
   ],
@@ -36,15 +36,26 @@
   },
   "homepage": "https://github.com/igoyalsamarth/rantail#readme",
   "dependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/generator": "^7.25.6",
+    "@babel/parser": "^7.25.6",
+    "@babel/traverse": "^7.25.6",
     "@paralleldrive/cuid2": "^2.2.2",
     "fast-glob": "^3.3.2",
     "lodash": "^4.17.21",
-    "minimist": "^1.2.8"
+    "minimist": "^1.2.8",
+    "webpack": "^5.95.0"
   },
   "devDependencies": {
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.6.8",
+    "@types/babel__traverse": "^7.20.6",
     "@types/lodash": "^4.14.202",
+    "@types/webpack": "^5.28.5",
+    "@types/webpack-sources": "^3.2.3",
     "ts-node": "^10.9.2",
     "tsup": "^8.0.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "webpack-sources": "^3.2.3"
   }
 }

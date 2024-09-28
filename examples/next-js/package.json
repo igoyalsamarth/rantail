@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "next": "14.1.1",
-    "rantail": "^0.0.0",
+    "rantail": "file:../../packages/rantail",
     "react": "^18",
     "react-dom": "^18"
   },
