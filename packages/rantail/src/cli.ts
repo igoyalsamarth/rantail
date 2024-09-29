@@ -2,7 +2,7 @@ import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 import generate from '@babel/generator';
 import { generateCUID } from './utils/cuid';
-import { Compiler, Compilation } from 'webpack';
+import { Compiler, Compilation, sources } from 'webpack';
 import * as fs from 'fs';
 import { Source } from 'webpack-sources';
 import path from 'path';
@@ -78,19 +78,21 @@ export class ASTObfuscateClassnamesPlugin {
 
           for (const assetName in assets) {
             if (/\.(js|jsx|ts|tsx)$/.test(assetName) && assetName.includes('/app/') && !assetName.includes('chunks') && !assetName.includes('not-found') && !assetName.includes('favicon')) {
-              //console.log(assetName)
-              const fullPath = path.join(process.cwd(), 'next-js', assetName);
+              console.log(assetName)
               //console.log('Full path:', fullPath);
-              let sourceCode = fs.readFileSync(fullPath, 'utf-8');
+              let sourceCode = assets[assetName].buffer().toString('utf-8');
               const ast = parse(sourceCode, {
                 sourceType: 'module',
                 plugins: ['jsx', 'typescript'],
               });
+              //console.log('ast', ast)
               traverse(ast, {
                 JSXAttribute: (path) => {
+                  console.log('JSXAttribute:', path);
                   //console.log('JSXAttribute:', path);
                   if (path.node.name.name === 'className') {
                     const valueNode = path.node.value;
+                    console.log('valueNode', valueNode)
 
                     if (valueNode) {
                       let classNames: string[] = [];
@@ -125,14 +127,15 @@ export class ASTObfuscateClassnamesPlugin {
 
               const output = generate(ast, {}, sourceCode).code;
 
-              console.log('output', output)
+              //console.log('output', output)
 
               // Use CustomSource instead of RawSource or OriginalSource
-              const customSource = new CustomSource(output);
-              sourceCode = customSource.getContent();
+              //const customSource = new CustomSource(output);
+              assets[assetName] = new sources.RawSource(output);
+
 
               // Write the modified source code back to the file
-              fs.writeFileSync(fullPath, sourceCode, 'utf-8');
+              //fs.writeFileSync(fullPath, sourceCode, 'utf-8');
 
 
               // Prepare CSS output for Tailwind
