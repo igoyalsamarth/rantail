@@ -2,10 +2,9 @@ import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 import generate from '@babel/generator';
 import { generateCUID } from './utils/cuid';
-import { Compiler, ResolveData } from 'webpack';
+import { Compiler, Compilation } from 'webpack';
 import * as fs from 'fs';
-import { Source } from 'webpack-sources'; // Import Source from webpack-sources
-import { countReset } from 'console';
+import { Source } from 'webpack-sources';
 import path from 'path';
 
 interface ASTObfuscateClassnamesPluginOptions {
@@ -32,7 +31,7 @@ class CustomSource implements Source {
   }
 
   buffer(): Buffer {
-    throw new Error('Method not implemented.');
+    return Buffer.from(this.content); // Convert string content to a Buffer
   }
 
   source(): string {
@@ -68,31 +67,31 @@ export class ASTObfuscateClassnamesPlugin {
   apply(compiler: Compiler): void {
     console.log('ASTObfuscateClassnamesPlugin is running...');
 
-    // Hook into normal module factory
-    compiler.hooks.normalModuleFactory.tap('ASTObfuscateClassnamesPlugin', (normalModuleFactory) => {
-      normalModuleFactory.hooks.beforeResolve.tapAsync(
-        'ASTObfuscateClassnamesPlugin',
-        (data: ResolveData, callback: () => void) => {
-          const { cuidLength = 8, prefix = '', suffix = '', ignorePrefix = '', outputCss, outputJson } = this.config;
+    compiler.hooks.thisCompilation.tap('ASTObfuscateClassnamesPlugin', (compilation: Compilation) => {
+      compilation.hooks.processAssets.tapAsync(
+        {
+          name: 'ASTObfuscateClassnamesPlugin',
+          stage: Compilation.PROCESS_ASSETS_STAGE_DEV_TOOLING, // Choose the right stage
+        },
+        (assets, callback) => {
+          const { cuidLength = 8, ignorePrefix = '', outputCss } = this.config;
 
-          if (data) {
-            const filename = data.request; // Get the filename
-
-            // Only process JavaScript/TypeScript files
-            if (/\.(js|jsx|ts|tsx)$/.test(filename) && filename.includes('/app/')) {
-
-              let sourceCode = fs.readFileSync(data.request, 'utf-8');
+          for (const assetName in assets) {
+            if (/\.(js|jsx|ts|tsx)$/.test(assetName) && assetName.includes('/app/') && !assetName.includes('chunks') && !assetName.includes('not-found') && !assetName.includes('favicon')) {
+              //console.log(assetName)
+              const fullPath = path.join(process.cwd(), 'next-js', assetName);
+              //console.log('Full path:', fullPath);
+              let sourceCode = fs.readFileSync(fullPath, 'utf-8');
               const ast = parse(sourceCode, {
                 sourceType: 'module',
                 plugins: ['jsx', 'typescript'],
               });
-
               traverse(ast, {
                 JSXAttribute: (path) => {
+                  //console.log('JSXAttribute:', path);
                   if (path.node.name.name === 'className') {
                     const valueNode = path.node.value;
 
-                    // Ensure valueNode is defined and handle different types
                     if (valueNode) {
                       let classNames: string[] = [];
 
@@ -100,35 +99,25 @@ export class ASTObfuscateClassnamesPlugin {
                         classNames = valueNode.value.split(' ');
                       } else if (valueNode.type === 'JSXExpressionContainer') {
                         if (valueNode.expression.type === 'Identifier') {
-                          classNames = [valueNode.expression.name]; // Handle as needed
+                          classNames = [valueNode.expression.name];
                         }
                       }
 
-                      // Log the original class names
-
                       const obfuscatedClassNames = classNames.map((className: string) => {
-                        // Log the class name before obfuscation
-                        //console.log('className', className)
-                        //console.log(this.classReplacements, 'object')
                         if (ignorePrefix.length > 0 && className.startsWith(ignorePrefix)) return className;
 
                         if (className.length === 0) return className;
 
                         if (!this.classReplacements[className]) {
-                          this.classReplacements[className] = generateCUID(8);
-                          //console.log('Obfuscating:', className, '=>', this.classReplacements[className]);
+                          this.classReplacements[className] = generateCUID(cuidLength);
                         }
-                        // Log the obfuscation result
                         return this.classReplacements[className];
                       });
 
-                      // Log the final obfuscated class names
-
-                      // Update the value node to a StringLiteral with the obfuscated class names
                       path.node.value = {
                         type: 'StringLiteral',
                         value: obfuscatedClassNames.join(' '),
-                      } as any; // Cast to `any` to bypass strict typing
+                      } as any; // Cast to `any`
                     }
                   }
                 },
@@ -143,22 +132,22 @@ export class ASTObfuscateClassnamesPlugin {
               sourceCode = customSource.getContent();
 
               // Write the modified source code back to the file
-              fs.writeFileSync(data.request, sourceCode, 'utf-8');
+              fs.writeFileSync(fullPath, sourceCode, 'utf-8');
 
-              // Resolve the CSS file path relative to the project's root directory
-              const cssFilePath = path.resolve(process.cwd(), 'app', 'global.css');
-              let cssContent = '';
 
-              for (const [key, value] of Object.entries(this.classReplacements)) {
-                cssContent += `.${value} { @apply ${key}; }\n`;
+              // Prepare CSS output for Tailwind
+              if (outputCss) {
+                let cssContent = '';
+                for (const [key, value] of Object.entries(this.classReplacements)) {
+                  cssContent += `.${value} { @apply ${key}; }\n`;
+                }
+                // Write or append the CSS content as needed
+                fs.writeFileSync(outputCss, cssContent, { flag: 'a' }); // Append to existing CSS
               }
-
-              // Write the CSS content to app/global.css in the project directory
-              fs.writeFileSync(cssFilePath, cssContent, 'utf-8');
             }
           }
 
-          callback(); // Call callback to indicate completion
+          callback();
         }
       );
     });
